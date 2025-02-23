@@ -1,6 +1,3 @@
-from typing import List
-
-
 class Person:
     people = {}
 
@@ -8,17 +5,28 @@ class Person:
         self.name = name
         self.age = age
         Person.people[name] = self
+    pass
 
 
-def create_person_list(people_data: List[dict]) -> List[Person]:
-    for person_dict in people_data:
-        person = Person(person_dict["name"], person_dict["age"])
+def create_person_list(people: list[dict]) -> list[Person]:
+    person_list = []
 
+    for person_dict in people:
+        person_list.append(
+            Person(
+                person_dict["name"],
+                person_dict["age"],
+            )
+        )
+
+    for person_dict in people:
+        name = person_dict["name"]
+        person = Person.people[name]
         if "wife" in person_dict and person_dict["wife"] is not None:
-            person.wife = Person.people[person_dict["wife"]]
-            person.wife.husband = person
+            wife_name = person_dict["wife"]
+            person.wife = Person.people[wife_name]
         elif "husband" in person_dict and person_dict["husband"] is not None:
-            person.husband = Person.people[person_dict["husband"]]
-            person.husband.wife = person
+            husband_name = person_dict["husband"]
+            person.husband = Person.people[husband_name]
 
-    return list(Person.people.values())
+    return person_list
